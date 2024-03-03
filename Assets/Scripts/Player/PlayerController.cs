@@ -7,13 +7,15 @@ using UnityEngine.Assertions.Comparers;
 public class PlayerController : MonoBehaviour
 {
     public Transform gunAnchor;
-
+    public GameObject GunEquiped;
 
 
     private Vector3 input;
     private Vector3 MoveVector;
+
     public float Speed;
     public float Gravity= 9.81f;
+
     MouseRotate RotateSystem;
     CharacterController characterController;
 

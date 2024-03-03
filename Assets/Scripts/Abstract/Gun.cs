@@ -10,13 +10,21 @@ public abstract class Gun : MonoBehaviour, Iinteractive
 
     public virtual void interact(GameObject Player)
     {
-        gunAnchor = Player.GetComponent<PlayerController>().gunAnchor; 
-        
+        Debug.Log("gunInteract");
+
+        gunAnchor = Player.GetComponent<PlayerController>().gunAnchor;
+        Player.GetComponent<PlayerController>().GunEquiped = gameObject;
+
+
     }
     public virtual void HoldWeapon()
     {
+        if(gunAnchor != null)
+        {
         transform.position = gunAnchor.position;
         transform.rotation = gunAnchor.rotation;
+
+        }
     }
    
 }
