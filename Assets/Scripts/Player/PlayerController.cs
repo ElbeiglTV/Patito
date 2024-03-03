@@ -6,16 +6,22 @@ using UnityEngine.Assertions.Comparers;
 
 public class PlayerController : MonoBehaviour
 {
+    public Transform gunAnchor;
+
+
+
     private Vector3 input;
     private Vector3 MoveVector;
     public float Speed;
     public float Gravity= 9.81f;
+    MouseRotate RotateSystem;
     CharacterController characterController;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        RotateSystem = new MouseRotate();
         characterController = GetComponent<CharacterController>();
     }
 
@@ -25,6 +31,7 @@ public class PlayerController : MonoBehaviour
         InputUpdater();
         SetMoveVector();
         SetGravity();
+        RotateSystem.RotatePlayer(transform);
         characterController.Move(MoveVector*Time.deltaTime);
     }
     private void SetGravity()

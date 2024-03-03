@@ -329,9 +329,55 @@ Transform:
   m_LocalPosition: {x: 0.64, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 251060821}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &777698100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 777698102}
+  - component: {fileID: 777698101}
+  m_Layer: 0
+  m_Name: TestGun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &777698101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777698100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0e264a708be4447aa962f4e6ea1b66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BulletSpawn: {fileID: 0}
+  gunAnchor: {fileID: 743065614}
+--- !u!4 &777698102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777698100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1991656480}
-  m_Father: {fileID: 251060821}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
@@ -560,6 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07213e01b2859ee46a7f0ace73ca17f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunAnchor: {fileID: 0}
   Speed: 4
   Gravity: 9.81
 --- !u!143 &1361872815
@@ -616,7 +663,7 @@ GameObject:
   - component: {fileID: 1991656482}
   - component: {fileID: 1991656481}
   m_Layer: 0
-  m_Name: Gun-Skin/Mesh
+  m_Name: Gun-Skin/Mesh WP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,11 +678,11 @@ Transform:
   m_GameObject: {fileID: 1991656479}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.37}
+  m_LocalPosition: {x: 0, y: 0, z: 0.172}
   m_LocalScale: {x: 0.17, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 743065614}
+  m_Father: {fileID: 777698102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1991656481
 MeshRenderer:
@@ -802,3 +849,4 @@ SceneRoots:
   - {fileID: 2130714629}
   - {fileID: 995237324}
   - {fileID: 1361872816}
+  - {fileID: 777698102}
