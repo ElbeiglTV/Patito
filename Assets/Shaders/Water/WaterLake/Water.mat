@@ -74,7 +74,7 @@ Material:
     - _FoamTiling: 1.85
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveIntencity: 0.2
+    - _WaveIntencity: 0.1
     - _WaveSpeed: 1
     m_Colors:
     - _CausticColor: {r: 119.42823, g: 119.42823, b: 119.42823, a: 1}
