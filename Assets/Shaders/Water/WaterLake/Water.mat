@@ -64,14 +64,14 @@ Material:
     - _CausticSecondaryOfsetSpeed: 0.01
     - _CausticSpeed: 0.01
     - _CausticTiling: 4
-    - _Depth: 0.95
-    - _DepthFallOf: 3.2
-    - _FoamAmount: 0.42
+    - _Depth: 0.65
+    - _DepthFallOf: 2.57
+    - _FoamAmount: 0.6
     - _FoamCutout: 0.07
-    - _FoamDepth: 7.87
-    - _FoamFallOf: 4.84
-    - _FoamShoreWidth: 0.92
-    - _FoamTiling: 1.43
+    - _FoamDepth: 9.4
+    - _FoamFallOf: 6.39
+    - _FoamShoreWidth: 2.51
+    - _FoamTiling: 1.85
     - _QueueControl: 0
     - _QueueOffset: 0
     - _WaveIntencity: 0.2
