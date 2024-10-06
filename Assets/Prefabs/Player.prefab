@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2674938279486113488}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CuackShotRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: -6389002579641517170}
   - component: {fileID: 5059513411896321604}
   - component: {fileID: 4927380461399790047}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,6 +164,7 @@ MonoBehaviour:
     cuackShootRoot: {fileID: 2674938279486113488}
     cuackBulletPrefab: {fileID: 3834359376731174889, guid: 2834dcb81eceb264baf907d203e25044,
       type: 3}
+  myCamera: {fileID: 0}
 --- !u!1 &4900724646259233009
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +176,7 @@ GameObject:
   - component: {fileID: 7716634478197256990}
   - component: {fileID: 4563304208749662884}
   - component: {fileID: 6927904251989607957}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
