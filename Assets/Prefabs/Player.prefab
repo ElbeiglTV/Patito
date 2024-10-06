@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: -6389002579641517170}
   - component: {fileID: 5059513411896321604}
   - component: {fileID: 4927380461399790047}
+  - component: {fileID: -6461006485719784079}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -165,6 +166,33 @@ MonoBehaviour:
     cuackBulletPrefab: {fileID: 3834359376731174889, guid: 2834dcb81eceb264baf907d203e25044,
       type: 3}
   myCamera: {fileID: 0}
+--- !u!54 &-6461006485719784079
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4839351590555756946}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 1
 --- !u!1 &4900724646259233009
 GameObject:
   m_ObjectHideFlags: 0
