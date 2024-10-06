@@ -12,8 +12,8 @@ public abstract class Gun : MonoBehaviour, Iinteractive
     {
         Debug.Log("gunInteract");
 
-        gunAnchor = Player.GetComponent<PlayerController>().gunAnchor;
-        Player.GetComponent<PlayerController>().GunEquiped = gameObject;
+        gunAnchor = Player.GetComponent<PlayerController>().playerReference.gunAnchor;
+        Player.GetComponent<PlayerController>().playerReference.GunEquiped = gameObject;
 
 
     }

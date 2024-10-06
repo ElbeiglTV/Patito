@@ -7,10 +7,6 @@ using UnityEngine.Assertions.Comparers;
 
 public class PlayerController : NetworkBehaviour
 {
-    public Transform gunAnchor;
-    public GameObject GunEquiped;
-
-
     private Vector3 input;
     private Vector3 MoveVector;
 
@@ -20,6 +16,9 @@ public class PlayerController : NetworkBehaviour
     MouseRotate RotateSystem;
     CharacterController characterController;
 
+    public PlayerReference playerReference;
+
+    public MyCamera myCamera;
 
     // Start is called before the first frame update
     public override void Spawned()
@@ -28,7 +27,8 @@ public class PlayerController : NetworkBehaviour
 
         if(!HasStateAuthority) return;
 
-        Camera.main.GetComponent<CameraFolow>().target = transform;
+        UnityEngine.Camera.main.GetComponent<MyCamera>().target = transform;
+        myCamera = UnityEngine.Camera.main.GetComponent<MyCamera>();
     }
     
     private void Update()
@@ -36,6 +36,10 @@ public class PlayerController : NetworkBehaviour
         if (!HasStateAuthority) return;
 
         InputUpdater();
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CuackShoot();
+        }
         
     }
 
@@ -77,6 +81,22 @@ public class PlayerController : NetworkBehaviour
         characterController = GetComponent<CharacterController>();
     }
 
+    public void CuackShoot()
+    {
+        Runner.Spawn(playerReference.cuackBulletPrefab, playerReference.cuackShootRoot.position, playerReference.cuackShootRoot.rotation);
+        myCamera.cameraShake.TriggerShake();
+    }
 
 
+
+}
+
+[System.Serializable]
+public class PlayerReference
+{
+    public Transform gunAnchor;
+    public GameObject GunEquiped;
+
+    public Transform cuackShootRoot;
+    public Bullet cuackBulletPrefab;
 }
