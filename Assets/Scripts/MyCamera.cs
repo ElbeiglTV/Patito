@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class MyCamera : NetworkBehaviour
+public class MyCamera : MonoBehaviour
 {
     public Transform target;
     public float smoothSpeed = 0.125f;
@@ -20,13 +20,17 @@ public class MyCamera : NetworkBehaviour
     {
         if (target == null)
             return;
-        if (!HasStateAuthority) return;
+        
 
         Vector3 desiredPosition = target.position + offset;
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
         transform.position = smoothedPosition;
 
         transform.LookAt(target);
+    }
+    void SetTarget(PlayerController player)
+    {
+        target = player.transform;
     }
 }
 [System.Serializable]
