@@ -1,10 +1,11 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public Transform gunAnchor;
     public GameObject GunEquiped;
@@ -23,28 +24,33 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        RotateSystem = new MouseRotate();
-        characterController = GetComponent<CharacterController>();
+        InitializePlayer();
+    }
+    
+    private void Update()
+    {
+        if (!HasStateAuthority) return;
+        InputUpdater();
+        
     }
 
     // Update is called once per frame
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        InputUpdater();
         SetMoveVector();
         SetGravity();
         RotateSystem.RotatePlayer(transform);
-        characterController.Move(MoveVector*Time.deltaTime);
+        characterController.Move(MoveVector*Runner.DeltaTime);
     }
     private void SetGravity()
     {
         if (characterController.isGrounded)
         {
-            MoveVector.y = -Gravity*Time.deltaTime;
+            MoveVector.y = -Gravity*Runner.DeltaTime;
         }
         else
         {
-            MoveVector.y -= Gravity * Time.deltaTime;
+            MoveVector.y -= Gravity * Runner.DeltaTime;
         }
     }
     private void SetMoveVector()
@@ -60,7 +66,12 @@ public class PlayerController : MonoBehaviour
         
 
     }
-    
+    public void InitializePlayer()
+    {
+        RotateSystem = new MouseRotate();
+        characterController = GetComponent<CharacterController>();
+    }
+
 
 
 }
