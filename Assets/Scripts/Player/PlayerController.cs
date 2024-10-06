@@ -22,14 +22,19 @@ public class PlayerController : NetworkBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    public override void Spawned()
     {
         InitializePlayer();
+
+        if(!HasStateAuthority) return;
+
+        Camera.main.GetComponent<CameraFolow>().target = transform;
     }
     
     private void Update()
     {
         if (!HasStateAuthority) return;
+
         InputUpdater();
         
     }
