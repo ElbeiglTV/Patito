@@ -58,7 +58,11 @@ public class PlayerController : NetworkBehaviour
     {
         InitializePlayer();
 
-        if (!HasStateAuthority) return;
+        if (!HasStateAuthority) 
+        {
+            GameManager.Instance.ApplyColor();
+            return; 
+        }
 
         // NetworkGameManager.Instance.RPC_AddToList(Runner.LocalPlayer);
 
