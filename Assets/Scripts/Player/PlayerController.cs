@@ -59,6 +59,9 @@ public class PlayerController : NetworkBehaviour
         InitializePlayer();
 
         if (!HasStateAuthority) return;
+
+        // NetworkGameManager.Instance.RPC_AddToList(Runner.LocalPlayer);
+
         GameManager.Instance.playerController = this;
 
         UnityEngine.Camera.main.GetComponent<MyCamera>().target = transform;
@@ -93,9 +96,9 @@ public class PlayerController : NetworkBehaviour
 
 
 
-        if (!Active)
+        if (!Active )
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && NetworkGameManager.Instance.GameStarted)
             {
                 Active = true;
                 GameManager.Instance.inGameUI.SetActive(true);
@@ -199,9 +202,16 @@ public class PlayerController : NetworkBehaviour
         ActualiseLifeUI();
         if (CurrentHealth <= 0)
         {
-            Runner.Despawn(Object);
+            Death();
         }
     }
+
+    public void Death()
+    {
+        NetworkGameManager.Instance.RPC_Death(Runner.LocalPlayer);
+        Runner.Despawn(Object);
+    }
+
     #endregion
 
     #region Sumergirse  en el agua
@@ -246,7 +256,7 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_ApplyColor(Color color)
     {
         playerReference.meshMaterial.material.color = color;
