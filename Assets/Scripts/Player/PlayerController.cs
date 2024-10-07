@@ -1,8 +1,13 @@
 using Fusion;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : NetworkBehaviour
 {
+    public bool Active;
+
+
+
     #region Movement
     private Vector3 input;
     private Vector3 MoveVector;
@@ -20,6 +25,7 @@ public class PlayerController : NetworkBehaviour
     public float CurrentHealth;
     #endregion
 
+    #region Sumergirse Config
     [Header("Sumergirse Config")]
     public bool isUnderWater;
     public float waterLevel;
@@ -27,19 +33,25 @@ public class PlayerController : NetworkBehaviour
     
     TickTimer sumergirseTimer;
     public float time;
-
+    #endregion
     #region CuackSoot
 
-    public float multiplier;
 
+    public float multiplier = 1;
+    public float multiplierMax;
+    public float multiplierMin;
+    public float multiplierTime;
+    float multiplierTimer;
     #endregion
 
     #region Camera
     public MyCamera myCamera;
+    public Transform RenderCameraTransformTarget;
     #endregion
 
 
     public PlayerReference playerReference;
+    public PlayerEvents playerEvents;
 
     // Start is called before the first frame update
     public override void Spawned()
@@ -47,15 +59,51 @@ public class PlayerController : NetworkBehaviour
         InitializePlayer();
 
         if (!HasStateAuthority) return;
+        GameManager.Instance.playerController = this;
 
         UnityEngine.Camera.main.GetComponent<MyCamera>().target = transform;
         myCamera = UnityEngine.Camera.main.GetComponent<MyCamera>();
+
+        playerEvents.UILifeEvent.AddListener(x => GameManager.Instance.LifeFill.fillAmount = x);
+        playerEvents.UILifeEvent.AddListener(x => GameManager.Instance.LifeFill2.fillAmount = x);
+
+        playerEvents.UIShootChargeEvent.AddListener(x => GameManager.Instance.ShootFill.fillAmount = x);
+        playerEvents.UIShootChargeEvent.AddListener(x => GameManager.Instance.ShootFill2.fillAmount = x);
+
+        GameManager.Instance.RenderCamera.transform.position = RenderCameraTransformTarget.position;
+
+        GameManager.Instance.RenderCamera.transform.LookAt(transform);
+
+        ActualiseLifeUI();
+
+        ActualiseShootChargeUI();
+
+
+        Active = false;
+        GameManager.Instance.inGameUI.SetActive(false);
+        GameManager.Instance.onSpawnUI.SetActive(true);
+
+
+
     }
 
     private void Update()
     {
         if (!HasStateAuthority) return;
 
+
+
+        if (!Active)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Active = true;
+                GameManager.Instance.inGameUI.SetActive(true);
+                GameManager.Instance.onSpawnUI.SetActive(false);
+            }
+            return;
+        }
+            
         InputUpdater();
         if (Input.GetKey(KeyCode.Mouse0) && !isUnderWater)
         {
@@ -118,18 +166,21 @@ public class PlayerController : NetworkBehaviour
 
     public void CuackShoot()
     {
-        if (multiplier < 5)
+        if (multiplierTimer < multiplierTime)
         {
-           multiplier = multiplier += Time.deltaTime;
-            
+            multiplierTimer += Time.deltaTime;
+            multiplier = multiplierMin+(multiplierMax-multiplierMin) * (multiplierTimer / multiplierTime);
+
+            ActualiseShootChargeUI();
         }
-        
     }
     public void CuackShootRelease()
     {
         Bullet b = Runner.Spawn(playerReference.cuackBulletPrefab, playerReference.cuackShootRoot.position, playerReference.cuackShootRoot.rotation);
         b.RPC_CuackShootBullet(multiplier/2);
-        multiplier = 1f; 
+        multiplier = multiplierMin;
+        multiplierTimer = 0;
+        ActualiseShootChargeUI();
     }
 
     #region Damage
@@ -141,9 +192,11 @@ public class PlayerController : NetworkBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (!Active) return;
         Debug.Log("Player Hit");
         CurrentHealth -= damage;
         myCamera.cameraShake.TriggerShake();
+        ActualiseLifeUI();
         if (CurrentHealth <= 0)
         {
             Runner.Despawn(Object);
@@ -182,6 +235,23 @@ public class PlayerController : NetworkBehaviour
 
     }
     #endregion
+
+    public void ActualiseLifeUI()
+    {
+        playerEvents.UILifeEvent.Invoke(CurrentHealth / MaxHealth);
+    }
+    public void ActualiseShootChargeUI()
+    {
+        playerEvents.UIShootChargeEvent.Invoke((multiplier-multiplierMin)/(multiplierMax-multiplierMin));
+    }
+
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_ApplyColor(Color color)
+    {
+        playerReference.meshMaterial.material.color = color;
+    }
+    
 }
 
 [System.Serializable]
@@ -196,4 +266,12 @@ public class PlayerReference
     [Header("Mesh")]
     public Transform meshTransform;
 
+    public MeshRenderer meshMaterial;
+
+}
+[System.Serializable]
+public class PlayerEvents
+{
+    public UnityEvent<float> UILifeEvent;
+    public UnityEvent<float> UIShootChargeEvent;
 }
