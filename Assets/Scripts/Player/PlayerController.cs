@@ -24,9 +24,15 @@ public class PlayerController : NetworkBehaviour
     public bool isUnderWater;
     public float waterLevel;
     public float moveBoost;
-    float normalLevel;
+    
     TickTimer sumergirseTimer;
     public float time;
+
+    #region CuackSoot
+
+    public float multiplier;
+
+    #endregion
 
     #region Camera
     public MyCamera myCamera;
@@ -51,10 +57,15 @@ public class PlayerController : NetworkBehaviour
         if (!HasStateAuthority) return;
 
         InputUpdater();
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isUnderWater)
+        if (Input.GetKey(KeyCode.Mouse0) && !isUnderWater)
         {
             CuackShoot();
         }
+        if (Input.GetKeyUp(KeyCode.Mouse0)&& !isUnderWater)
+        {
+            CuackShootRelease();
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             if (isUnderWater) return;
@@ -107,8 +118,18 @@ public class PlayerController : NetworkBehaviour
 
     public void CuackShoot()
     {
-        Runner.Spawn(playerReference.cuackBulletPrefab, playerReference.cuackShootRoot.position, playerReference.cuackShootRoot.rotation);
-        myCamera.cameraShake.TriggerShake();
+        if (multiplier < 5)
+        {
+           multiplier = multiplier += Time.deltaTime;
+            
+        }
+        
+    }
+    public void CuackShootRelease()
+    {
+        Bullet b = Runner.Spawn(playerReference.cuackBulletPrefab, playerReference.cuackShootRoot.position, playerReference.cuackShootRoot.rotation);
+        b.RPC_CuackShootBullet(multiplier/2);
+        multiplier = 1f; 
     }
 
     #region Damage
@@ -122,6 +143,7 @@ public class PlayerController : NetworkBehaviour
     {
         Debug.Log("Player Hit");
         CurrentHealth -= damage;
+        myCamera.cameraShake.TriggerShake();
         if (CurrentHealth <= 0)
         {
             Runner.Despawn(Object);
@@ -140,13 +162,13 @@ public class PlayerController : NetworkBehaviour
     {
         if (isUnderWater)
         {
-            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, normalLevel, playerReference.meshTransform.position.z);
+            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, playerReference.meshTransform.position.y + waterLevel, playerReference.meshTransform.position.z);
             isUnderWater = false;
         }
         else
         {
-            normalLevel = playerReference.meshTransform.position.y;
-            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, normalLevel-waterLevel, playerReference.meshTransform.position.z);
+            
+            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, playerReference.meshTransform.position.y - waterLevel, playerReference.meshTransform.position.z);
             sumergirseTimer = TickTimer.CreateFromSeconds(Runner, time);
             isUnderWater = true;
         }

@@ -7,6 +7,7 @@ using UnityEngine;
 public class MyCamera : MonoBehaviour
 {
     public Transform target;
+    public Transform parent;
     public float smoothSpeed = 0.125f;
     public Vector3 offset;
 
@@ -15,6 +16,7 @@ public class MyCamera : MonoBehaviour
     private void Start()
     {
         cameraShake.Initialize(transform,this);
+        
     }
     void LateUpdate()
     {
@@ -23,18 +25,19 @@ public class MyCamera : MonoBehaviour
         
 
         Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+        Vector3 smoothedPosition = Vector3.Lerp(parent.position, desiredPosition, smoothSpeed);
+        parent.position = smoothedPosition;
 
-        transform.LookAt(target);
+        
     }
     void SetTarget(PlayerController player)
     {
         target = player.transform;
+        parent.LookAt(target);
     }
 }
 [System.Serializable]
-public class CameraShake
+public class CameraShake 
 {
     private MyCamera cam;
     private Transform transform;
@@ -59,6 +62,7 @@ public class CameraShake
 
     public void TriggerShake(float duration = -1f)
     {
+        shakeMagnitude = 0.7f;
         if (duration > 0)
         {
             shakeDuration = duration;
