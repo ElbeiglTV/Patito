@@ -15,12 +15,14 @@ public class Bullet : NetworkBehaviour
     public override void Spawned()
     {
         _lifetickTimer = TickTimer.CreateFromSeconds(Runner,_lifeTime);
+
+        Rigidbody rb = Object.GetComponent<Rigidbody>();
+        rb.velocity = transform.forward * _speed;
     }
 
     public override void FixedUpdateNetwork()
     {
-        transform.position += transform.forward * _speed * Runner.DeltaTime;
-
+       
         if (!_lifetickTimer.Expired(Runner)) return;
 
         Runner.Despawn(Object);
@@ -29,14 +31,16 @@ public class Bullet : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.layer != 3) return;
-        PlayerController player;
-
-        if (collision.gameObject.TryGetComponent(out player))
+        if (!HasStateAuthority) return;
+         
+        if (collision.collider.gameObject.layer == 3)
         {
+            collision.collider.gameObject.GetComponent<PlayerController>().RPC_TakeDamage(_damage);
            // player.TakeDamage(_damage);
            Debug.Log("Player Hit");
+           Runner.Despawn(Object);
         }
+
     }
 
 

@@ -1,61 +1,83 @@
 using Fusion;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Comparers;
 
 public class PlayerController : NetworkBehaviour
 {
+    #region Movement
     private Vector3 input;
     private Vector3 MoveVector;
 
     public float Speed;
-    public float Gravity= 9.81f;
+    public float Gravity = 9.81f;
 
     MouseRotate RotateSystem;
     CharacterController characterController;
+    #endregion
+
+    #region Life
+    [Header("Life")]
+    public float MaxHealth;
+    public float CurrentHealth;
+    #endregion
+
+    [Header("Sumergirse Config")]
+    public bool isUnderWater;
+    public float waterLevel;
+    public float moveBoost;
+    float normalLevel;
+    TickTimer sumergirseTimer;
+    public float time;
+
+    #region Camera
+    public MyCamera myCamera;
+    #endregion
+
 
     public PlayerReference playerReference;
-
-    public MyCamera myCamera;
 
     // Start is called before the first frame update
     public override void Spawned()
     {
         InitializePlayer();
 
-        if(!HasStateAuthority) return;
+        if (!HasStateAuthority) return;
 
         UnityEngine.Camera.main.GetComponent<MyCamera>().target = transform;
         myCamera = UnityEngine.Camera.main.GetComponent<MyCamera>();
     }
-    
+
     private void Update()
     {
         if (!HasStateAuthority) return;
 
         InputUpdater();
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isUnderWater)
         {
             CuackShoot();
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if (isUnderWater) return;
+            RPC_ToggleSumergirse();
+        }
         
+
     }
 
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
+        SumergirseCheck();
         SetMoveVector();
         SetGravity();
         RotateSystem.RotatePlayer(transform);
-        characterController.Move(MoveVector*Runner.DeltaTime);
+        characterController.Move(MoveVector * Runner.DeltaTime);
     }
     private void SetGravity()
     {
         if (characterController.isGrounded)
         {
-            MoveVector.y = -Gravity*Runner.DeltaTime;
+            MoveVector.y = -Gravity * Runner.DeltaTime;
         }
         else
         {
@@ -65,14 +87,16 @@ public class PlayerController : NetworkBehaviour
     private void SetMoveVector()
     {
 
-        MoveVector = new Vector3(input.x, MoveVector.y/Speed, input.z);
-        MoveVector = MoveVector * Speed;
+        MoveVector = new Vector3(input.x, MoveVector.y / Speed, input.z);
+
+        if(!isUnderWater)MoveVector = MoveVector * Speed;
+        else MoveVector = MoveVector * Speed * moveBoost;
     }
 
-    private void InputUpdater() 
+    private void InputUpdater()
     {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        
+
 
     }
     public void InitializePlayer()
@@ -87,16 +111,67 @@ public class PlayerController : NetworkBehaviour
         myCamera.cameraShake.TriggerShake();
     }
 
+    #region Damage
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_TakeDamage(float Damage)
+    {
+        TakeDamage(Damage);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log("Player Hit");
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
+        {
+            Runner.Despawn(Object);
+        }
+    }
+    #endregion
+
+    #region Sumergirse  en el agua
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_ToggleSumergirse()
+    {
+        TogleSumergirse();
+    }
+
+    public void TogleSumergirse()
+    {
+        if (isUnderWater)
+        {
+            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, normalLevel, playerReference.meshTransform.position.z);
+            isUnderWater = false;
+        }
+        else
+        {
+            normalLevel = playerReference.meshTransform.position.y;
+            playerReference.meshTransform.position = new Vector3(playerReference.meshTransform.position.x, normalLevel-waterLevel, playerReference.meshTransform.position.z);
+            sumergirseTimer = TickTimer.CreateFromSeconds(Runner, time);
+            isUnderWater = true;
+        }
+    }
+    public void SumergirseCheck()
+    {
+        if (!isUnderWater) return;
+        if (!sumergirseTimer.Expired(Runner)) return;
+        RPC_ToggleSumergirse();
 
 
+    }
+    #endregion
 }
 
 [System.Serializable]
 public class PlayerReference
 {
+    [Header("armas")]
     public Transform gunAnchor;
     public GameObject GunEquiped;
-
+    [Header("CuackShoot")]
     public Transform cuackShootRoot;
     public Bullet cuackBulletPrefab;
+    [Header("Mesh")]
+    public Transform meshTransform;
+
 }

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3352688387575941230}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.162, z: 0.615}
+  m_LocalPosition: {x: 0, y: 0.162, z: 1.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -159,13 +159,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 4
   Gravity: 9.81
+  MaxHealth: 100
+  CurrentHealth: 100
+  isUnderWater: 0
+  waterLevel: 0.3
+  moveBoost: 2
+  time: 2
+  myCamera: {fileID: 0}
   playerReference:
     gunAnchor: {fileID: 0}
     GunEquiped: {fileID: 0}
     cuackShootRoot: {fileID: 2674938279486113488}
     cuackBulletPrefab: {fileID: 3834359376731174889, guid: 2834dcb81eceb264baf907d203e25044,
       type: 3}
-  myCamera: {fileID: 0}
+    meshTransform: {fileID: 7716634478197256990}
 --- !u!54 &-6461006485719784079
 Rigidbody:
   m_ObjectHideFlags: 0
