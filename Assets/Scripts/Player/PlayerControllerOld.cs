@@ -112,7 +112,7 @@ public class PlayerControllerOld : NetworkBehaviour
         }
             
         InputUpdater();
-        if (Input.GetKey(KeyCode.Mouse0) && !isUnderWater)
+        if (Input.GetKey(KeyCode.Mouse0) && !isUnderWater)//tiro cargado
         {
             CuackShoot();
         }
