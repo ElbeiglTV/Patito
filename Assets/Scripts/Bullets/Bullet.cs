@@ -46,7 +46,7 @@ public class Bullet : NetworkBehaviour
          
         if (collision.collider.gameObject.layer == 3)
         {
-            collision.collider.gameObject.GetComponent<PlayerController>().RPC_TakeDamage(damage);
+            collision.collider.gameObject.GetComponent<PlayerControllerOld>().RPC_TakeDamage(damage);
            // player.TakeDamage(_damage);
            Debug.Log("Player Hit");
            Runner.Despawn(Object);

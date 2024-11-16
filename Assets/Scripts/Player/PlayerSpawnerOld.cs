@@ -4,7 +4,7 @@ using UnityEngine;
 using Fusion;
 using System.Linq;
 
-public class PlayerSpawner : SimulationBehaviour ,IPlayerJoined
+public class PlayerSpawnerOld : SimulationBehaviour ,IPlayerJoined
 {
     [SerializeField] GameObject _prefab;
 

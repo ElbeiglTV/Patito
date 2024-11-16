@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public Image colorPreview;
     public Color PatitoColor;
 
-    public PlayerController playerController;
+    public PlayerControllerOld playerController;
     #endregion
 
 

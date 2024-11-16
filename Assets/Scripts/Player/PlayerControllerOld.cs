@@ -2,7 +2,7 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerControllerOld : NetworkBehaviour
 {
     public bool Active;
 

@@ -30,7 +30,7 @@ public class MyCamera : MonoBehaviour
 
         
     }
-    void SetTarget(PlayerController player)
+    void SetTarget(PlayerControllerOld player)
     {
         target = player.transform;
         parent.LookAt(target);
