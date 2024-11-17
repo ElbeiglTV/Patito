@@ -1,27 +1,24 @@
-using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-public class RunnerNetworkHandler : MonoBehaviour, INetworkRunnerCallbacks
+public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkRunner _runnerPrefab;
     NetworkRunner _currentRunner;
 
-    void Start()
-    {
-        JoinLobby();
-    }
-
-    #region LOBBY
+    public event Action OnJoinedLobby = delegate { };
+    public event Action<List<SessionInfo>> OnSessionListUpdate = delegate { };
 
     public void JoinLobby()
     {
-        if (_currentRunner) Destroy(_currentRunner);
+        if (_currentRunner)
+            Destroy(_currentRunner.gameObject);
 
         _currentRunner = Instantiate(_runnerPrefab);
 
@@ -41,25 +38,22 @@ public class RunnerNetworkHandler : MonoBehaviour, INetworkRunnerCallbacks
         else
         {
             Debug.Log("[Custom Msg] Joined Lobby");
-            //Evento para Menu
+
+            OnJoinedLobby();
         }
     }
 
-    #endregion
-
-    #region Create / Join Session
-
-    public void HostSession(string sessionName, string sceneName)
+    public async void HostGame(string sessionName, string sceneName)
     {
-        InitializeGame(GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
+        await InitializeGame(GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
     }
 
-    public void JoinSession(SessionInfo sessionToJoin)
+    public async void JoinGame(SessionInfo session)
     {
-        InitializeGame(GameMode.Client, sessionToJoin.Name, SceneManager.GetActiveScene().buildIndex);
+        await InitializeGame(GameMode.Client, session.Name, SceneManager.GetActiveScene().buildIndex);
     }
 
-    async void InitializeGame(GameMode gameMode, string sessionName, int sceneIndex)
+    async Task InitializeGame(GameMode gameMode, string sessionName, int sceneIndex)
     {
         _currentRunner.ProvideInput = true;
 
@@ -72,27 +66,26 @@ public class RunnerNetworkHandler : MonoBehaviour, INetworkRunnerCallbacks
 
         if (!result.Ok)
         {
-            Debug.LogError("[Custom Error] Unable to Join or Host Game");
+            Debug.LogError("[Custom Error] Unable to Start Game");
         }
         else
         {
-            Debug.Log("[Custom Msg] Game Joined / Created");
-            //Evento para Menu
+            Debug.Log("[Custom Msg] Game Started");
         }
     }
 
-    #endregion
-
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        if (sessionList.Count == 0)
-        {
-            HostSession("s", "Game");
-        }
-        else
-        {
-            JoinSession(sessionList[0]);
-        }
+        //if (sessionList.Count == 0)
+        //{
+        //    HostGame("Game 1", "Game");
+        //}
+        //else
+        //{
+        //    JoinGame(sessionList[0]);
+        //}
+
+        OnSessionListUpdate(sessionList);
     }
 
 
