@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 687826604537914604}
   - component: {fileID: 8181609487662700137}
   - component: {fileID: 2737436793247566262}
+  - component: {fileID: -557876321541676792}
   m_Layer: 0
   m_Name: Bala
   m_TagString: Untagged
@@ -126,6 +127,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2737436793247566262}
+  - {fileID: -557876321541676792}
 --- !u!54 &8181609487662700137
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -175,3 +177,17 @@ MonoBehaviour:
     Position: 0.01
     Rotation: 0.01
     Scale: 0.01
+--- !u!114 &-557876321541676792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313279309353536389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e22b199a3cd70549878055cc639d5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dmg: 25
+  _balaSpeed: 50

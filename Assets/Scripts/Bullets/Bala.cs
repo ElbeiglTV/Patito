@@ -16,12 +16,12 @@ public class Bala : NetworkBehaviour
     {
         GetComponent<NetworkRigidbody3D>().Rigidbody.AddForce(transform.forward * _balaSpeed, ForceMode.VelocityChange);//impulso hacia adelante
 
-        if (HasStateAuthority)
+        if (HasStateAuthority)//tiempo de vida
         {
             _lifeTimer = TickTimer.CreateFromSeconds(Runner, 2);
         }
     }
-    public override void FixedUpdateNetwork()
+    public override void FixedUpdateNetwork()//actualizacion del tiempo de vida en red
     {
         if (!_lifeTimer.Expired(Runner)) return;
 
