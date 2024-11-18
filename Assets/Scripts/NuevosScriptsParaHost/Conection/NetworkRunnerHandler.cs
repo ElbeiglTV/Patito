@@ -15,7 +15,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public event Action OnJoinedLobby = delegate { };
     public event Action<List<SessionInfo>> OnSessionListUpdate = delegate { };
 
-    public void JoinLobby()
+    #region Metodos de Lobby
+
+    public void JoinLobby()// botón. si existe un Runner destruye el nuevo, instancia un prefab del runner y le pasa InetworkRunnercallbacks a los callbacks.
     {
         if (_currentRunner)
             Destroy(_currentRunner.gameObject);
@@ -27,7 +29,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         JoinLobbyAsync();
     }
 
-    async void JoinLobbyAsync()
+    async void JoinLobbyAsync()//login asincrono. espera respuesta del servidor.
     {
         var result = await _currentRunner.JoinSessionLobby(SessionLobby.Custom, "Normal Lobby");
 
@@ -42,7 +44,8 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             OnJoinedLobby();
         }
     }
-
+    #endregion
+    #region Crear Sala / entrar a sala
     public async void HostGame(string sessionName, string sceneName)
     {
         await InitializeGame(GameMode.Host, sessionName, SceneUtility.GetBuildIndexByScenePath($"Scenes/{sceneName}"));
@@ -73,18 +76,10 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             Debug.Log("[Custom Msg] Game Started");
         }
     }
+    #endregion
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        //if (sessionList.Count == 0)
-        //{
-        //    HostGame("Game 1", "Game");
-        //}
-        //else
-        //{
-        //    JoinGame(sessionList[0]);
-        //}
-
         OnSessionListUpdate(sessionList);
     }
 
