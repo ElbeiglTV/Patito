@@ -43,8 +43,9 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
         }
         
     }
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)//se ejecuta en el jugador que es sacado del server
     {
+        //prender un canvas de derrota.
         runner.Shutdown();
     }
 
