@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class PlayerController : NetworkBehaviour
 {
+    
+    
     public bool Active;
 
 
@@ -265,7 +267,6 @@ public class PlayerController : NetworkBehaviour
     {
         playerReference.meshMaterial.material.color = color;
     }
-    
 }
 
 [System.Serializable]

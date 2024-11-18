@@ -11,9 +11,6 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     //[SerializeField] GameObject _prefab;
     [SerializeField] NetworkPrefabRef _playerRef;
 
-    [SerializeField] Transform _spawner;
-    [SerializeField] Transform _spawner2;
-
     /*public void PlayerJoined(PlayerRef player)
     {
         SpawnPlayer(player, _prefab,_spawner);
@@ -42,12 +39,13 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            Runner.Spawn(_playerRef, _spawner.position, null, player);
+            Runner.Spawn(_playerRef, null, null, player);
         }
-        else
-        {
-            runner.Spawn(_playerRef, _spawner2.position, null, player);
-        }
+        
+    }
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+    {
+        runner.Shutdown();
     }
 
     #region Unused Callbacks
@@ -55,7 +53,7 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
+    
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
