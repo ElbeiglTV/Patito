@@ -15,9 +15,24 @@ public class LocalInputs : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        _inputData.axisX = Input.GetAxis("Horizontal");
+        _inputData.axisZ = Input.GetAxis("Forward");
+
+        /*if (Input.GetKeyDown(KeyCode.Space))
         {
-            _isFirePressed = true;
-        }
+            _isJumpPressed = true;
+        }*/
+        _isJumpPressed |= Input.GetKeyDown(KeyCode.Space);//salto
+        _isFirePressed |= Input.GetMouseButtonDown(0);
+    }
+    public NetworkInputData GetLocalInputs()
+    {
+        _inputData.isFirePressed = _isFirePressed;
+        _isFirePressed = false;
+
+        _inputData.isJumpPressed = _isJumpPressed;
+        _isJumpPressed = false;
+
+        return _inputData;
     }
 }

@@ -33,8 +33,11 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     }*/
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        if (!NetworkPlayer.Local) return;
 
+        input.Set(NetworkPlayer.Local.Inputs.GetLocalInputs());
     }
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)

@@ -3,6 +3,10 @@ using UnityEngine;
 
 public struct NetworkInputData: INetworkInput
 {
-    public Vector3 position;
-    public float speed;
+    public float axisX;
+    public float axisZ;
+
+    public NetworkBool isFirePressed;
+    public NetworkBool isJumpPressed;
+
 }
