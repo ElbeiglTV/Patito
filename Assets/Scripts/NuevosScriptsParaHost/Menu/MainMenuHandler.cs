@@ -60,7 +60,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         _hostGameBtn.interactable = false;
 
-        _networkRunnerHandler.HostGame(_sessionNameField.text, "Game");
+        _networkRunnerHandler.HostGame(_sessionNameField.text, "Playground");
     }
 }
 
