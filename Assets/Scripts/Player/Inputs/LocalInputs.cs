@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class LocalInputs : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    NetworkInputData _inputData;
+    bool _isJumpPressed;
+    bool _isFirePressed;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        _inputData = new NetworkInputData();
+
+    }
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _isFirePressed = true;
+        }
     }
 }
