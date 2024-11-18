@@ -345,6 +345,7 @@ MonoBehaviour:
   PreferredRunner: 0
   Components:
   - {fileID: 963194226}
+  - {fileID: 129481434}
   _guid: aaafda1c-fda0-4391-
 --- !u!114 &129481433
 MonoBehaviour:
@@ -2074,7 +2075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunnerPrefab: {fileID: 1726308191}
   StartMode: 1
-  AutoStartAs: 2
+  AutoStartAs: 6
   AutoHideGUI: 1
   AutoClients: 1
   ClientStartDelay: 0.1
@@ -4180,9 +4181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acdddabfdaa31d745adb69b3fd841b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 4839351590555756946, guid: 89f7a9f2851c453409e8024f2bbbafd0, type: 3}
-  _spawner: {fileID: 313153761}
-  _spawner2: {fileID: 591076386}
+  _playerRef:
+    RawGuidValue: 00fdbef7059103d468ec9f03a5cf74b9
 --- !u!1 &1733852686
 GameObject:
   m_ObjectHideFlags: 0
