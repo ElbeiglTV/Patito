@@ -32,10 +32,10 @@ public class Bala : NetworkBehaviour
     {
         if (!Object || !HasStateAuthority) return;
 
-        /*if (other.TryGetComponent(out LifeHandler player))
+        if (other.TryGetComponent(out LifeHandler player))
         {
             player.TakeDamage(_dmg);
-        }*/
+        }
         Runner.Despawn(Object);
     }
 }
