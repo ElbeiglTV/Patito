@@ -16,7 +16,7 @@ public class ShootHandler : NetworkBehaviour
 
         SpawnBullet();
 
-        //RaycastBullet();
+        RaycastBullet();
 
         OnShot();
     }
@@ -28,7 +28,7 @@ public class ShootHandler : NetworkBehaviour
 
     void RaycastBullet()
     {
-        Debug.DrawLine(transform.position, transform.position + transform.forward * 2, Color.green, 2f);
+        Debug.DrawLine(transform.position, transform.position + transform.forward * 2, Color.blue, 4f);//gizmo.
 
         Runner.LagCompensation.Raycast(origin: transform.position,
                                         direction: transform.forward,
@@ -36,10 +36,10 @@ public class ShootHandler : NetworkBehaviour
                                         player: Object.InputAuthority,
                                         hit: out var hitInfo);
 
-        //if (hitInfo.Hitbox == null) return;
+        if (hitInfo.Hitbox == null) return;
 
-        //if (!hitInfo.Hitbox.transform.root.TryGetComponent(out LifeHandler player)) return;
+        if (!hitInfo.Hitbox.transform.root.TryGetComponent(out LifeHandler player)) return;
 
-        //player.TakeDamage(25);
+        player.TakeDamage(25);
     }
 }

@@ -9,9 +9,7 @@ public class LifeHandler : NetworkBehaviour
     [Networked, OnChangedRender(nameof(CurrentLifeChanged))]
     byte CurrentLife { get; set; }
 
-    const byte MAX_LIFE = 100;
-
-    byte _maxDeaths = 3;
+    const byte MAX_LIFE = 150;
 
     [Networked, OnChangedRender(nameof(DeadStateChanged))]
     NetworkBool IsDead { get; set; }
@@ -36,7 +34,6 @@ public class LifeHandler : NetworkBehaviour
 
             DeadStateChanged();
         }
-
     }
 
     public void TakeDamage(byte dmg)
@@ -54,7 +51,6 @@ public class LifeHandler : NetworkBehaviour
         {
             DisconnectPlayer();
             IsDead = true;
-            
         }
         
     }
