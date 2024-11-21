@@ -3185,7 +3185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4427098770c8e3e4ca9b8018aaeef3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sessionItemPrefab: {fileID: 3816054291665790074, guid: f57eaf56be13e2542975609dad7edff0,
+  _sessionItemPrefab: {fileID: 2789006017476680657, guid: f57eaf56be13e2542975609dad7edff0,
     type: 3}
   _networkRunnerHandler: {fileID: 1413673333}
   _statusText: {fileID: 1239948451193085385}
