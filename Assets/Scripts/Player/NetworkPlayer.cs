@@ -11,15 +11,15 @@ public class NetworkPlayer : NetworkBehaviour
 
     public override void Spawned()
     {
-        Inputs = GetComponent<LocalInputs>();
-        if (Object.HasInputAuthority)
+        if (HasInputAuthority)
         {
+            Inputs = GetComponent<LocalInputs>();
             Local = this;
             Inputs.enabled = true;
         }
         else
         {
-            Inputs.enabled = false;
+            GetComponent<LocalInputs>().enabled = false;
         }
     }
 }

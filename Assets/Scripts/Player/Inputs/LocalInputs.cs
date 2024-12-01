@@ -7,6 +7,8 @@ public class LocalInputs : MonoBehaviour
     NetworkInputData _inputData;
     bool _isJumpPressed;
     bool _isFirePressed;
+    float _axisX;
+    float _axisZ;
 
     private void Awake()
     {
@@ -15,15 +17,11 @@ public class LocalInputs : MonoBehaviour
     }
     private void Update()
     {
-        //_inputData.axisX = Input.GetAxis("Horizontal");
-        //_inputData.axisZ = Input.GetAxis("Forward");
-
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _isJumpPressed = true;
-        }*/
         _isJumpPressed |= Input.GetKeyDown(KeyCode.Space);//salto
         _isFirePressed |= Input.GetMouseButtonDown(0);//disparo
+        _axisX = Input.GetAxis("Horizontal");
+        _axisZ = Input.GetAxis("Vertical");
+
     }
     public NetworkInputData GetLocalInputs()
     {
@@ -33,6 +31,8 @@ public class LocalInputs : MonoBehaviour
         _inputData.isJumpPressed = _isJumpPressed;
         _isJumpPressed = false;
 
+        _inputData.axisX = _axisX;
+        _inputData.axisZ = _axisZ;
         return _inputData;
     }
 }
