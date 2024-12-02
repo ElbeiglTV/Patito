@@ -30,7 +30,7 @@ public class ShootHandler : NetworkBehaviour
     {
         Debug.DrawLine(transform.position, transform.position + transform.forward * 2, Color.blue, 4f);//gizmo.
 
-        Runner.LagCompensation.Raycast(origin: transform.position,
+        Runner.LagCompensation.Raycast(origin: _bulletSpawnTransform.position,
                                         direction: transform.forward,
                                         length: 100,
                                         player: Object.InputAuthority,

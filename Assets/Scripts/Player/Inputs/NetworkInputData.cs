@@ -6,9 +6,12 @@ public struct NetworkInputData: INetworkInput
     public float axisX;
     public float axisZ;
 
-    public Vector3 MousePosition;
+    public Quaternion rotation;
 
     public NetworkBool isFirePressed;
     public NetworkBool isJumpPressed;
 
+    public NetworkBool active;
+
+    public Color color;
 }

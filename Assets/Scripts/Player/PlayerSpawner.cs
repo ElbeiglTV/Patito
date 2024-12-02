@@ -28,6 +28,10 @@ public class PlayerSpawner : SimulationBehaviour, INetworkRunnerCallbacks
             Runner.Spawn(prefab, _spawner2.position);
         }
     }*/
+
+  
+
+
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         if (!NetworkPlayer.Local) return;

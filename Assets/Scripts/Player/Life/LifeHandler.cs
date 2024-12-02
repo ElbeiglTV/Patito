@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LifeHandler : NetworkBehaviour
 {
@@ -34,6 +35,7 @@ public class LifeHandler : NetworkBehaviour
 
             DeadStateChanged();
         }
+        RPC_lifeActualizer();
     }
 
     public void TakeDamage(byte dmg)
@@ -45,16 +47,46 @@ public class LifeHandler : NetworkBehaviour
             dmg = CurrentLife;
         }
         CurrentLife -= dmg;
-
-
+        RPC_DamageEfect();
+        RPC_lifeActualizer();
         if (CurrentLife == 0)
         {
-            DisconnectPlayer();
+
+            if (HasStateAuthority)
+            {
+                if (HasInputAuthority)
+                {
+                    NetworkGameManager.Instance.Player1Lose = true;
+                }
+                else
+                {
+                    NetworkGameManager.Instance.Player2Lose = true;
+                }
+            }
+           // DisconnectPlayer();
+
             IsDead = true;
         }
         
     }
 
+    
+
+    [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
+    public void RPC_DamageEfect()
+    {
+        Camera.main.GetComponent<MyCamera>().cameraShake.TriggerShake();
+
+       
+
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+    public void RPC_lifeActualizer()
+    {
+        GameManager.Instance.LifeFill.fillAmount = CurrentLife / (float)MAX_LIFE;
+
+    }
 
     void DeadStateChanged()
     {
@@ -73,6 +105,7 @@ public class LifeHandler : NetworkBehaviour
         {
             Runner.Disconnect(Object.InputAuthority);
         }
+
         Runner.Despawn(Object);
     }
 
@@ -80,4 +113,17 @@ public class LifeHandler : NetworkBehaviour
     {
         OnDespawn();
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+    public void RPC_ShowMessage(string message)
+    {
+        // Lógica para mostrar el mensaje en la UI del jugador.
+        Debug.Log(message);
+
+        // Si usas una UI de Unity, puedes actualizar un Text o Panel aquí.
+        // Ejemplo: GameManager.Instance.ShowMessageOnScreen(message);
+    }
+
+    
+
 }

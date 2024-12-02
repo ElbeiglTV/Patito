@@ -40,7 +40,10 @@ public class GameManager : MonoBehaviour
     public Image colorPreview;
     public Color PatitoColor;
 
-    public PlayerController playerController;
+   public bool player1Lose;
+    public bool player2Lose;
+
+    public NewPlayerController playerController;
     #endregion
 
 
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
         PatitoColor.a = 1;
         colorPreview.color = PatitoColor;
         Rslider.image.color = new Color(amount, 0, 0);
-        ApplyColor();
+        
     }
     public void ActualizeSliderG(float amount)
     {
@@ -61,7 +64,7 @@ public class GameManager : MonoBehaviour
         colorPreview.color = PatitoColor;
 
         Gslider.image.color = new Color(0, amount, 0);
-        ApplyColor();
+        
     }
     public void ActualizeSliderB(float amount)
     {
@@ -70,11 +73,36 @@ public class GameManager : MonoBehaviour
         PatitoColor.a = 1;
         colorPreview.color = PatitoColor;
         Bslider.image.color = new Color(0, 0, amount);
-        ApplyColor();
+        
     }
-    public void ApplyColor()
+    private void Update()
     {
-        playerController.RPC_ApplyColor(PatitoColor);
+        player1Lose = NetworkGameManager.Instance.Player1Lose;
+        player2Lose = NetworkGameManager.Instance.Player2Lose;
+
+
+        if (player1Lose && !player2Lose)
+        {
+            if (NetworkGameManager.Instance.HasStateAuthority)
+            {
+                NetworkGameManager.Instance.LOSE.SetActive(true);
+            }
+            else
+            {
+                NetworkGameManager.Instance.WIN.SetActive(true);
+            }
+        }
+        else if (player2Lose && !player1Lose)
+        {
+            if (NetworkGameManager.Instance.HasInputAuthority)
+            {
+                NetworkGameManager.Instance.WIN.SetActive(true);
+            }
+            if (!NetworkGameManager.Instance.HasStateAuthority)
+            {
+                NetworkGameManager.Instance.LOSE.SetActive(true);
+            }
+        }
     }
 
 

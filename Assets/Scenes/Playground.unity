@@ -459,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 129481431}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 77, y: 8.7, z: 41.9}
+  m_LocalPosition: {x: 52.63532, y: 8.7, z: 41.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -753,7 +753,7 @@ Transform:
   m_GameObject: {fileID: 313153760}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 67.73, y: 10.08, z: 35.59}
+  m_LocalPosition: {x: 53, y: 10.08, z: 58.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1723,7 +1723,7 @@ Transform:
   m_GameObject: {fileID: 591076385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 51.43, y: 9.04, z: 44.64}
+  m_LocalPosition: {x: 83.61, y: 9.04, z: 54.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2301,7 +2301,7 @@ PrefabInstance:
     - target: {fileID: 5327387884336153978, guid: 9dcc1dec8553e0843ba22721a9eaedb8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -19.199951
+      value: -19.19983
       objectReference: {fileID: 0}
     - target: {fileID: 7432434141639277803, guid: 9dcc1dec8553e0843ba22721a9eaedb8,
         type: 3}
@@ -3845,6 +3845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1312802751}
+  - component: {fileID: 1312802752}
   m_Layer: 0
   m_Name: ONSPAWNUI
   m_TagString: Untagged
@@ -3868,6 +3869,21 @@ Transform:
   - {fileID: 1733852687}
   m_Father: {fileID: 1820617227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1312802752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312802750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ec54a8442dcc84fba9e73591c1138a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 417734217}
+  slider2: {fileID: 252593064}
+  slider3: {fileID: 1900407487}
 --- !u!1 &1533771861
 GameObject:
   m_ObjectHideFlags: 0
@@ -4931,6 +4947,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerList: []
+  spawnpoint1: {fileID: 313153761}
+  spawnpoint2: {fileID: 591076386}
   WIN: {fileID: 559723853}
   LOSE: {fileID: 824971240}
 --- !u!4 &1983628473

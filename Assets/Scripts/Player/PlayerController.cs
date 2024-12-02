@@ -62,13 +62,13 @@ public class PlayerController : NetworkBehaviour
 
         if (!HasStateAuthority) 
         {
-            GameManager.Instance.ApplyColor();
+            
             return; 
         }
 
         // NetworkGameManager.Instance.RPC_AddToList(Runner.LocalPlayer);
 
-        GameManager.Instance.playerController = this;
+        //GameManager.Instance.playerController = this;
 
         UnityEngine.Camera.main.GetComponent<MyCamera>().target = transform;
         myCamera = UnityEngine.Camera.main.GetComponent<MyCamera>();

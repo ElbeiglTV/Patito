@@ -1,5 +1,4 @@
 using Fusion;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,9 +11,9 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if (Instance == null)
         {
-        Instance = this;
+            Instance = this;
         }
-        else 
+        else
         {
             Destroy(this);
             return;
@@ -25,19 +24,26 @@ public class NetworkGameManager : NetworkBehaviour
 
     public bool GameStarted => Runner.ActivePlayers.Count() > 1;
 
+    public Transform spawnpoint1;
+    public Transform spawnpoint2;
+
+    [Networked] public bool Player1Lose { get; set; }
+    [Networked] public bool Player2Lose { get; set; } 
 
     public GameObject WIN;
     public GameObject LOSE;
+
     
 
-    [Rpc(RpcSources.StateAuthority,RpcTargets.All)]
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
     public void RPC_Death(PlayerRef pRef)
     {
-       if(pRef == Runner.LocalPlayer)
+        if (pRef == Runner.LocalPlayer)
         {
             LOSE.SetActive(true);
         }
-       else
+        else
         {
             WIN.SetActive(true);
         }
