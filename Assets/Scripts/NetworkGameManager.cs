@@ -36,7 +36,7 @@ public class NetworkGameManager : NetworkBehaviour
     
 
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Death(PlayerRef pRef)
     {
         if (pRef == Runner.LocalPlayer)

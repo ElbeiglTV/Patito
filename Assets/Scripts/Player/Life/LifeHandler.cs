@@ -76,9 +76,6 @@ public class LifeHandler : NetworkBehaviour
     public void RPC_DamageEfect()
     {
         Camera.main.GetComponent<MyCamera>().cameraShake.TriggerShake();
-
-       
-
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
