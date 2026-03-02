@@ -57,6 +57,7 @@ public class NewPlayerController : NetworkBehaviour
         if (!GetInput(out inputs)) return; // este motodo agarra el input de el cliente y lo pasa al host el cual ejecuta 
         //las acciones en base a los inputs locales de cada cliente y el estado actual del mundo
         if(NetworkGameManager.Instance.GameStarted)   RPC_SetColor(inputs.color);
+        if (NetworkGameManager.Instance.GameEnded) return;
         
 
         if (!inputs.active) return;
@@ -66,6 +67,10 @@ public class NewPlayerController : NetworkBehaviour
         _characterController.Move(MoveVector * Runner.DeltaTime);
         _characterController.transform.rotation = inputs.rotation;
 
+        if (inputs.isInteractPressed)
+        {
+            TryInteract();
+        }
 
         //Disparo
         if (inputs.isFirePressed)
@@ -74,7 +79,34 @@ public class NewPlayerController : NetworkBehaviour
         }
 
     }
+    void TryInteract()
+    {
+        Debug.Log("[Interact] TryInteractPlayer");
+        Ray ray = new Ray(
+            transform.position,
+            transform.forward
+        );
 
+        if (Physics.Raycast(ray, out RaycastHit hit, 4f))
+        {
+            var interactable = hit.collider.GetComponent<NetworkInteractable>();
+
+            if (interactable != null)
+            {
+                RPC_RequestInteract(interactable.Object);
+            }
+        }
+    }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    void RPC_RequestInteract(NetworkObject target)
+    {
+        Debug.Log("[Interact] RPC_PlayerInteract");
+        var interactable = target.GetComponent<NetworkInteractable>();
+        if (interactable != null)
+        {
+            interactable.TryInteract(Object.InputAuthority);
+        }
+    }
     private void SetGravity()
     {
         if (_characterController.isGrounded)

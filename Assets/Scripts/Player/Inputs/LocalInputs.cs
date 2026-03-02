@@ -15,6 +15,7 @@ public class LocalInputs : MonoBehaviour
     bool _EscPressed;
     bool _isJumpPressed;
     bool _isFirePressed;
+    bool _isInteractPressed;
     float _axisX;
     float _axisZ;
 
@@ -53,6 +54,10 @@ public class LocalInputs : MonoBehaviour
 
         _color = GameManager.Instance.PatitoColor;
 
+        _isInteractPressed |= Input.GetKeyDown(KeyCode.E);//disparo
+
+
+
         if (!active)
         {
             if (Input.GetKeyDown(KeyCode.Escape) && NetworkGameManager.Instance.GameStarted)
@@ -75,6 +80,9 @@ public class LocalInputs : MonoBehaviour
 
         _inputData.isJumpPressed = _isJumpPressed;
         _isJumpPressed = false;
+
+        _inputData.isInteractPressed = _isInteractPressed;
+        _isInteractPressed = false;
 
         _inputData.axisX = _axisX;
         _inputData.axisZ = _axisZ;

@@ -1,126 +1,70 @@
-using Fusion;
-using System.Collections;
-using System;
-using System.Collections.Generic;
+Ôªøusing Fusion;
 using UnityEngine;
-using System.Linq;
+using System;
 
 public class LifeHandler : NetworkBehaviour
 {
-    [Networked, OnChangedRender(nameof(CurrentLifeChanged))]
-    byte CurrentLife { get; set; }
+    [Networked, OnChangedRender(nameof(OnLifeChanged))]
+    public byte CurrentLife { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnDeadChanged))]
+    public NetworkBool IsDead { get; set; }
 
     const byte MAX_LIFE = 150;
 
-    [Networked, OnChangedRender(nameof(DeadStateChanged))]
-    NetworkBool IsDead { get; set; }
-
-    //LifeBarItem _lifeBarItem;
-
     public event Action<bool> OnDeadStateChanged = delegate { };
-    public event Action OnResurrect = delegate { };
     public event Action OnDespawn = delegate { };
 
     public override void Spawned()
     {
-        //_lifeBarItem = LifeBarHandler.Instance.CreateNewLifeBarItem(this);
-
         if (HasStateAuthority)
         {
             CurrentLife = MAX_LIFE;
+            IsDead = false;
         }
-        else
-        {
-            CurrentLifeChanged();
 
-            DeadStateChanged();
-        }
-        RPC_lifeActualizer();
+        // Forzar actualizaci√≥n visual inicial
+        OnLifeChanged();
+        OnDeadChanged();
     }
 
     public void TakeDamage(byte dmg)
     {
-        if (IsDead) return;//si est· muerto corta aqui
+        // SOLO EL HOST MODIFICA ESTADO
+        if (!HasStateAuthority) return;
+        if (IsDead) return;
 
-        if (CurrentLife < dmg)//vida: 90-65-40-25-0
-        {
-            dmg = CurrentLife;
-        }
-        CurrentLife -= dmg;
-        RPC_DamageEfect();
-        RPC_lifeActualizer();
+        if (CurrentLife <= dmg)
+            CurrentLife = 0;
+        else
+            CurrentLife -= dmg;
+
         if (CurrentLife == 0)
         {
-
-            if (HasStateAuthority)
-            {
-                if (HasInputAuthority)
-                {
-                    NetworkGameManager.Instance.Player1Lose = true;
-                }
-                else
-                {
-                    NetworkGameManager.Instance.Player2Lose = true;
-                }
-            }
-           // DisconnectPlayer();
-
             IsDead = true;
+
+            // Notificamos al GameManager correctamente
+            NetworkGameManager.Instance.RegisterPlayerDeath(Object.InputAuthority);
         }
-        
     }
 
-    
-
-    [Rpc(RpcSources.StateAuthority,RpcTargets.InputAuthority)]
-    public void RPC_DamageEfect()
+    void OnLifeChanged()
     {
-        Camera.main.GetComponent<MyCamera>().cameraShake.TriggerShake();
+        // Solo actualiza la UI del due√±o del jugador
+        if (!Object.HasInputAuthority) return;
+
+        GameManager.Instance.LifeFill.fillAmount =
+            CurrentLife / (float)MAX_LIFE;
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
-    public void RPC_lifeActualizer()
-    {
-        GameManager.Instance.LifeFill.fillAmount = CurrentLife / (float)MAX_LIFE;
-
-    }
-
-    void DeadStateChanged()
+    void OnDeadChanged()
     {
         GetComponentInParent<HitboxRoot>().HitboxRootActive = !IsDead;
         OnDeadStateChanged(IsDead);
-    }
-
-    void CurrentLifeChanged()
-    {
-        //_lifeBarItem.UpdateFillAmount(CurrentLife / (float)MAX_LIFE);
-    }
-
-    void DisconnectPlayer()//desconecta al Proxy
-    {
-        if (!Object.HasInputAuthority)
-        {
-            Runner.Disconnect(Object.InputAuthority);
-        }
-
-        Runner.Despawn(Object);
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         OnDespawn();
     }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
-    public void RPC_ShowMessage(string message)
-    {
-        // LÛgica para mostrar el mensaje en la UI del jugador.
-        Debug.Log(message);
-
-        // Si usas una UI de Unity, puedes actualizar un Text o Panel aquÌ.
-        // Ejemplo: GameManager.Instance.ShowMessageOnScreen(message);
-    }
-
-    
-
 }

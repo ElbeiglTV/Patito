@@ -10,6 +10,7 @@ public struct NetworkInputData: INetworkInput
 
     public NetworkBool isFirePressed;
     public NetworkBool isJumpPressed;
+    public NetworkBool isInteractPressed;
 
     public NetworkBool active;
 

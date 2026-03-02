@@ -77,32 +77,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        player1Lose = NetworkGameManager.Instance.Player1Lose;
-        player2Lose = NetworkGameManager.Instance.Player2Lose;
-
-
-        if (player1Lose && !player2Lose)
-        {
-            if (NetworkGameManager.Instance.HasStateAuthority)
-            {
-                NetworkGameManager.Instance.LOSE.SetActive(true);
-            }
-            else
-            {
-                NetworkGameManager.Instance.WIN.SetActive(true);
-            }
-        }
-        else if (player2Lose && !player1Lose)
-        {
-            if (NetworkGameManager.Instance.HasInputAuthority)
-            {
-                NetworkGameManager.Instance.WIN.SetActive(true);
-            }
-            if (!NetworkGameManager.Instance.HasStateAuthority)
-            {
-                NetworkGameManager.Instance.LOSE.SetActive(true);
-            }
-        }
+       
     }
 
 

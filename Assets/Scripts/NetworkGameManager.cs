@@ -1,7 +1,6 @@
 using Fusion;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
 
 public class NetworkGameManager : NetworkBehaviour
 {
@@ -10,43 +9,46 @@ public class NetworkGameManager : NetworkBehaviour
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-        }
         else
-        {
-            Destroy(this);
-            return;
-        }
+            Destroy(gameObject);
     }
-
-    public List<PlayerRef> PlayerList = new List<PlayerRef>();
-
-    public bool GameStarted => Runner.ActivePlayers.Count() > 1;
 
     public Transform spawnpoint1;
     public Transform spawnpoint2;
 
-    [Networked] public bool Player1Lose { get; set; }
-    [Networked] public bool Player2Lose { get; set; } 
+    public bool GameStarted => Runner.ActivePlayers.Count() > 1;
+
+    [Networked, OnChangedRender(nameof(OnGameEndedChanged))]
+    public NetworkBool GameEnded { get; set; }
+
+    
+
+    [Networked]
+    public PlayerRef Loser { get; set; }
 
     public GameObject WIN;
     public GameObject LOSE;
 
-    
-
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_Death(PlayerRef pRef)
+    public void RegisterPlayerDeath(PlayerRef deadPlayer)
     {
-        if (pRef == Runner.LocalPlayer)
-        {
-            LOSE.SetActive(true);
-        }
-        else
-        {
-            WIN.SetActive(true);
-        }
+        if (!HasStateAuthority) return;
+        if (GameEnded) return;
+
+        Loser = deadPlayer;
+        GameEnded = true;
+        OnGameEndedChanged();
     }
 
+    void OnGameEndedChanged()
+    {
+        if (!GameEnded) return;
+
+        bool iLost = Runner.LocalPlayer == Loser;
+
+        if (iLost)
+            LOSE.SetActive(true);
+        else
+            WIN.SetActive(true);
+    }
 }
